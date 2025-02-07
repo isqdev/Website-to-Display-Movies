@@ -2,14 +2,24 @@ import "../css/MovieCard.css"
 import { useMovieContext } from "../contexts/MovieContext"
 
 function MovieCard({movie}) {
-    const {isFavorite, addToFavorites, removeFromFavorites} = useMovieContext()
+    const {
+        isFavorite, addToFavorites, removeFromFavorites,
+        isWatchlist, addToWatchlist, removeFromWatchlist
+    } = useMovieContext()
+
     const favorite = isFavorite(movie.id)
+    const watchlist = isWatchlist(movie.id)
 
     function onFavoriteClick(e){
         e.preventDefault()
         if (favorite) removeFromFavorites(movie.id)
         else addToFavorites(movie)
+    }
 
+    function onWatchlistClick (e) {
+        e.preventDefault()
+        if (watchlist) removeFromWatchlist(movie.id)
+        else addToWatchlist(movie)
     }
     
     return <div className="movie-card">
@@ -19,11 +29,14 @@ function MovieCard({movie}) {
                 <button className={`favorite-btn ${favorite ? "active" : ""}`} onClick={onFavoriteClick}>
                     ♥
                 </button>
+                <button className={`watchlist-btn ${watchlist ? "active" : ""}`} onClick={onWatchlistClick}>
+                    +
+                </button>
             </div>
         </div>
         <div className="movie-info">
             <h3>{movie.title}</h3>
-            <p>{movie.release_date?.split("-")[3]}</p>
+            <p>{movie.release_date?.split("-")[0]}</p>
         </div>
     </div>
 }
